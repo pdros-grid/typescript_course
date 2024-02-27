@@ -1,3 +1,38 @@
+enum HTTPStatus {
+  OK = 200,
+  INTERNAL_SERVER_ERROR = 500,
+}
+
+type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+type HTTPRequest = {
+  method: HTTPMethod;
+  host: string;
+  path: string;
+  body?: unknown;
+  params: unknown;
+};
+
+type HTTPResponse = {
+  status: HTTPStatus;
+};
+
+type UserRole = 'admin' | 'user';
+
+type User = {
+  name: string;
+  age: number;
+  role: UserRole[];
+  createdAt: Date;
+  isDeleted: boolean;
+};
+
+type Handler = {
+  next?: (request: HTTPRequest) => HTTPResponse;
+  error?: (error: unknown) => HTTPResponse;
+  complete?: () => void;
+};
+
 class Observer {
   constructor(handlers) {
     this.handlers = handlers;
@@ -61,11 +96,11 @@ class Observable {
 
     observer._unsubscribe = this._subscribe(observer);
 
-    return ({
+    return {
       unsubscribe() {
         observer.unsubscribe();
-      }
-    });
+      },
+    };
   }
 }
 
@@ -75,14 +110,10 @@ const HTTP_GET_METHOD = 'GET';
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 
-
 const userMock = {
   name: 'User Name',
   age: 26,
-  roles: [
-    'user',
-    'admin'
-  ],
+  roles: ['user', 'admin'],
   createdAt: new Date(),
   isDeleated: false,
 };
@@ -100,18 +131,18 @@ const requestsMock = [
     host: 'service.example',
     path: 'user',
     params: {
-      id: '3f5h67s4s'
+      id: '3f5h67s4s',
     },
-  }
+  },
 ];
 
 const handleRequest = (request) => {
   // handling of request
-  return {status: HTTP_STATUS_OK};
+  return { status: HTTP_STATUS_OK };
 };
 const handleError = (error) => {
   // handling of error
-  return {status: HTTP_STATUS_INTERNAL_SERVER_ERROR};
+  return { status: HTTP_STATUS_INTERNAL_SERVER_ERROR };
 };
 
 const handleComplete = () => console.log('complete');
@@ -121,7 +152,7 @@ const requests$ = Observable.from(requestsMock);
 const subscription = requests$.subscribe({
   next: handleRequest,
   error: handleError,
-  complete: handleComplete
+  complete: handleComplete,
 });
 
 subscription.unsubscribe();

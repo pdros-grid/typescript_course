@@ -130,11 +130,11 @@ const requestsMock: HTTPRequest[] = [
   },
 ];
 
-const handleRequest = (request: HTTPRequest) => {
+const handleRequest = (request: HTTPRequest): HTTPResponse => {
   // handling of request
   return { status: HTTPStatus.OK };
 };
-const handleError = (error: unknown) => {
+const handleError = (error: unknown): HTTPResponse => {
   // handling of error
   return { status: HTTPStatus.INTERNAL_SERVER_ERROR };
 };

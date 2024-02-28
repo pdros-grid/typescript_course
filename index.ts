@@ -1,7 +1,9 @@
-enum HTTPStatus {
-  OK = 200,
-  INTERNAL_SERVER_ERROR = 500,
-}
+const HTTPStatus = {
+  OK: 200,
+  INTERNAL_SERVER_ERROR: 500,
+} as const;
+
+type HTTPStatus = (typeof HTTPStatus)[keyof typeof HTTPStatus];
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
